@@ -26,20 +26,42 @@ class Terminal:
                 print(tela)
                 Terminal.congelar(0.06)
     
+    def carregando():
+        Terminal.limpar_terminal()
+        for i in range(2):
+            carregando = 'verificando.'
+            for j in range(3):
+                Terminal.limpar_terminal()
+                print(carregando)
+                carregando += '.'
+                time.sleep(0.5)
+class Menu:
+    
     def menuzinho():
         Terminal.titulo()
         print('[1] Fazer login\n[2] Criar uma conta\n[3] Sobre nós\n')
 
 
     def menu(opcao):
-        try:
-            if opcao == 1:
-                Terminal.msg_entrada(['Entre com seu email e senha, caso não tenha... crie uma conta!'],Terminal.titulo)
+        if opcao == '1':
+            while True:
+                Terminal.msg_entrada(['Entre com seu email e senha...\nCaso não tenha... crie uma conta!\n'],Terminal.titulo)
                 email = input('Email: ')
                 senha = input('Senha: ')
-                Funcoes.verificar(email,senha)
-        except:
+                print()
+                Terminal.carregando()
+                '''validacao = Funcoes.verificar(email,senha)
+                if not validacao:
+                    continue
+                else:
+                    break'''
+        elif opcao == '2':
             ...
+        elif opcao == '3':
+            print('Esta seção ainda está sendo finalizada!')
+            Terminal.congelar(2)
+            return False
+
 
 class Funcoes:
     ...
