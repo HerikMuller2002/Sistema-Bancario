@@ -2,6 +2,7 @@
 import os
 import time
 import json
+import sys
 
 class Terminal:
 
@@ -66,6 +67,7 @@ class Menu:
                         break
             elif opcao == '2':
                 Funcoes.criar()
+                return False
             elif opcao == '3':
                 Terminal.msg_entrada(['Esta seção ainda está sendo finalizada!'],Terminal.limpar_terminal)
                 Terminal.congelar(1)
@@ -96,7 +98,14 @@ class Funcoes:
             continuar = input(' ').lower()
             if continuar == 's':
                 user = {'nome':nome,'sobrenome':sobrenome,'cpf':cpf,'email':email,'senha':senha}
-                with open('data_base.json','a') as db:
+                with open('data_base.json','w',encoding='utf-8') as db:
                     json.dump(user,db)
+                break
             else:
                 continue
+
+    def verificar(email, senha):
+        with open('data_base.json','r') as db:
+            dados = json.load(db)
+            print(dados)
+            sys.exit()
