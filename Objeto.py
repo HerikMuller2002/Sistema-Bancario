@@ -1,6 +1,6 @@
 class User:
     
-    def __init__(self, nome, sobrenome, cpf, rg, email, senha):
+    def __init__(self, nome, sobrenome, cpf, email, senha):
         ...
 
 class Conta:
