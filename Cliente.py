@@ -38,13 +38,14 @@ class ExcluirCliente:
     
     def excluir(self,email,senha):
         with open('data_base.json','r',encoding='utf-8') as db: # abrindo o arquivo json em modo leitura
-            if os.stat('data_base.json').st_size == 0: # se o arquivo está vazio
-                ...
-            else: # se o arquivo não estiver vazio
-                lista = json.load(db) # carregando a lista do arquivo
-                for i in range(0,len(lista)):
-                    if lista[i]['senha'] == senha and lista[i]['email'] == email:
-                        lista.remove(lista[i])
-                        with open('data_base.json','w',encoding='utf-8') as db: # abrindo o arquivo em modo escrita
-                            json.dump(lista, db) # método dump para escrever a lista no json
+            lista = json.load(db) # carregando a lista do arquivo
+            i = 0 
+            while i < len(lista):
+                if lista[i]['senha'] == senha and lista[i]['email'] == email:
+                    lista.remove(lista[i])
+                    with open('data_base.json','w',encoding='utf-8') as db: # abrindo o arquivo em modo escrita
+                        json.dump(lista, db) # método dump para escrever a lista no json
+                        break
+                else:
+                    i += 1
         return True
