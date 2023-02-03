@@ -1,7 +1,7 @@
-import json
-import os
+import json # import da biblioteca json para tratar arquivo json
+from os import stat # import da função stat para verificar se o arquivo json está vazio
 
-class CriarCliente: # Classe das informações do cliente
+class CriarCliente: # Classe para criar uma conta/cliente com suas respectivas informações
 
     def __init__(self,nome,sobrenome,cpf,email,senha,saldo): # função para carregar os atributos do cliente
         self.nome = nome # definindo o atributo 'nome'
@@ -11,7 +11,7 @@ class CriarCliente: # Classe das informações do cliente
         self.senha = senha # definindo o atributo 'senha'
         self.saldo = saldo # definindo o atributo 'saldo'
         with open('data_base.json','r',encoding='utf-8') as db: # abrindo o arquivo json em modo leitura
-            if os.stat('data_base.json').st_size == 0: # se o arquivo está vazio
+            if stat('data_base.json').st_size == 0: # se o arquivo está vazio
                 lista = [] # criando uma lista vazia para guardar os dicionários
             else: # se o arquivo não estiver vazio
                 lista = json.load(db) # carregando a lista do arquivo     
@@ -29,23 +29,23 @@ class CriarCliente: # Classe das informações do cliente
 
 
 
-class ExcluirCliente:
+class ExcluirCliente: # classe para excluir uma conta/cliente
 
     def __init__(self,email,senha): # função para carregar os atributos do cliente
         self.email = email # definindo o atributo 'email'
         self.senha = senha # definindo o atributo 'senha'
         self.excluir(email,senha)
     
-    def excluir(self,email,senha):
+    def excluir(self,email,senha): # Função para excluir a conta
         with open('data_base.json','r',encoding='utf-8') as db: # abrindo o arquivo json em modo leitura
             lista = json.load(db) # carregando a lista do arquivo
-            i = 0 
-            while i < len(lista):
-                if lista[i]['senha'] == senha and lista[i]['email'] == email:
-                    lista.remove(lista[i])
+            i = 0  # variável de controle
+            while i < len(lista): # loop para encontrar a conta no json
+                if lista[i]['senha'] == senha and lista[i]['email'] == email: # conta encontrada
+                    lista.remove(lista[i]) # removendo a conta
                     with open('data_base.json','w',encoding='utf-8') as db: # abrindo o arquivo em modo escrita
-                        json.dump(lista, db) # método dump para escrever a lista no json
-                        break
-                else:
-                    i += 1
-        return True
+                        json.dump(lista, db) # método dump para escrever a nova lista com a conta removida no json
+                        break # parando o loop
+                else: # conta não encontrada
+                    i += 1 # variável de controle recebe mais 1 para continuar o loop
+        return True # retornando True para encerrar a função e dar continuidade ao sistema

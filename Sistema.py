@@ -1,134 +1,121 @@
+# import
 from Cliente import CriarCliente
 from Cliente import ExcluirCliente
 import json
 import os
 import time
 
-###################################################
+######################################################################
+# Funções de erros
+######################################################################
 
-def limpar():
-    os.system('cls')
+def msg_erro(erro): # função para imprimir a mensagem de erro na tela
+    limpar() # função para limpar o terminal
+    titulo() # função para imprimir o título
+    print('Erro!\n{}'.format(erro)) # imprimindo o erro na tela
+    congelar(2) # função para congelar a tela
+    limpar() # função para limpar o terminal
+    titulo() # função para imprimir o título
+    print('Tente novamente...') # imprimindo "tente novamente na tela"
+    congelar(1) # função para congelar a tela
 
-def congelar(tempo):
-    time.sleep(tempo)
+def error(erro): # função para definir o tipo de erro
+    if erro == 'confirm': # erro de confirmação de senha
+        msg_erro('Email e senha errados!') # chamando a função para imprimir a mensagem expecífica
+       
+    elif erro == 'TypeError': # erro de tipagem de entrada
+        msg_erro('Digite um valor válido!') # chamando a função para imprimir a mensagem expecífica
 
-def error(erro):
-    if erro == 'confirm':
-        limpar()
-        titulo()
-        print('Erro!\nEmail e senha errados!')
-        congelar(2)
-        limpar()
-        titulo()
-        print('Tente novamente...')
-        congelar(1)
-    elif erro == 'TypeError':
-        limpar()
-        titulo()
-        print('Erro!\nDigite um valor válido!')
-        congelar(2)
-        limpar()
-        titulo()
-        print('Tente novamente...')
-        congelar(1)
-    elif erro == 'invalid saque':
-        limpar()
-        titulo()
-        print('Erro!\nSaque inválido!')
-        congelar(2)
-        limpar()
-        titulo()
-        print('Tente novamente...')
-        congelar(1)
-    elif erro == 'invalid deposito':
-        limpar()
-        titulo()
-        print('Erro!\nDeposito inválido!')
-        congelar(2)
-        limpar()
-        titulo()
-        print('Tente novamente...')
-        congelar(1)
+    elif erro == 'invalid saque': # valor de saque inválido
+        msg_erro('Saque inválido!')# chamando a função para imprimir a mensagem expecífica
+
+    elif erro == 'invalid deposito': # valor de depósito inválido
+        msg_erro('Deposito inválido!') # chamando a função para imprimir a mensagem expecífica
+
     elif erro == 'opcao':
-        limpar()
-        titulo()
-        print('Erro!\nOpção inválida!')
-        congelar(2)
-        limpar()
-        titulo()
-        print('Tente novamente...')
-        congelar(1)
+        print('Erro!\nOpção inválida!') # opção inválida
+        msg_erro('Opção inválida!') # chamando a função para imprimir a mensagem expecífica
 
-###################################################   
+######################################################################
+# Funções de 'Terminal', para imprimir ou apagar informações no terminal
+###################################################################### 
 
-def titulo():
-    limpar()
-    print('{:=^50}\n'.format(' Banco Herik '))
+def limpar(): # função para limapar o terminal
+    os.system('cls') # chamando o método system para imprimir o comando 'cls' no terminal
 
-def msg_entrada(texto,funcao=limpar):
-    if type(texto) == str:
-        msg = [texto]
-    else:
-        msg = texto
-    for i in msg:
-        lista = []
-        congelar(1.5)
-        funcao()
-        for j in i:
-            funcao()
-            lista.append(j)
-            tela = ''.join(lista)
-            print(tela)
-            congelar(0.06)
+def congelar(tempo): # função para congelar a tela por alguns segundos
+    time.sleep(tempo) # chamando o método 'sleep' para congelar o terminal par alguns segundos
 
-def carregando():
-    for i in range(0,3):
-        carregando = 'Carregando.'
-        for j in range(3):
-            limpar()
-            titulo()
-            print(carregando)
-            carregando += '.'
-            congelar(0.5)
+def titulo(): # função para imprimir o nome do sistema 'banco herik'
+    limpar() # chamando a função limpar, para limpar o terminal
+    print('{:=^50}\n'.format(' Banco Herik ')) # imprimindo o nome do sistema 'banco herik' na tela
 
-def entrada():
-    titulo()
-    msg_entrada(['Olá, Tudo bem?','Me chamo Herik','sou o assistente virtual do Banco Herik','Estou aqui para te ajudar!'],titulo)
-    congelar(0.5)
-    while True:
-        titulo()
-        msg_entrada(['O que deseja fazer?'],titulo)
-        print()
-        print('[1] Fazer login\n[2] Criar uma conta\n[3] Sobre nós\n')
-        validas = ['1','2','3']
-        opcao = input(' :')
-        if opcao not in validas:
-            error('TypeError')
-        else:
-            continuar = opcao_entrada(opcao)
-            if not continuar:
-                continue
-            else:
-                break
+def msg_entrada(texto,funcao=limpar): # função para imprimir texto na tela com animação do 'assistente virtual'
+    if type(texto) == str: # verificando se o tipo do parâmetro é string
+        msg = [texto] # guardando a string em uma lista
+    else: # se o parâmetro já for uma lista... 
+        msg = texto # armazenando a lista na varível utilizada na função
+    for i in msg: # loop para limpar a frase impressa na tela e começar uma nova frase
+        lista = [] # criando uma nova lista para guardar letra por letra que será impressa na tela
+        congelar(1.5) # chamando a função congelar, para congelar a frase na tela, dando tempo para o usuário ler 
+        funcao() # antes de imprimir algum texto na tela, é executado uma função para fins estéticos. como as funções limpar(),titulo()...
+        for j in i: # loop para imprimir letra por letra, dando a sensação de animação
+            funcao() # antes de imprimir algum texto na tela, é executado uma função para fins estéticos. como as funções limpar(),titulo()...
+            lista.append(j) # adicionando a letra em uma nova lista para que ela seja mostrada junto com as que virão, dando a sensação de animação de digitação no terminal
+            tela = ''.join(lista) # transformando a nova lista em string para imprimir na tela
+            print(tela) # imprimindo a nova lista na tela
+            congelar(0.06) # congelando a tela por alguns milésimos para dar a sensação de animação
 
-def input_dados(tipo_dados):
-    if tipo_dados == 'criar':
-        msg_entrada('preecha as informações da conta:',titulo)
-        print()
-        nome = input('Nome: ')
-        sobrenome = input('sobrenome: ')
-        cpf = input('cpf: ')
-        email = input('email: ')
-        senha = input('senha: ')
-        return nome,sobrenome,cpf,email,senha
-    else:
-        msg_entrada('preecha as informações da conta:',titulo)
-        print()
-        email = input('email: ')
-        senha = input('senha: ')
-        return email,senha
+def carregando(): # função para imprimir carregando na tela, para dar a sensção de um sistema dinâmico com requisições
+    for i in range(0,3): # loop para definir uma variável de controle
+        carregando = 'Carregando.' # definindo a string com apenas um '.'
+        for j in range(3): # loop de controle
+            limpar() # função para limpar o terminal
+            titulo() # função para imprimir o nome do sistema no terminal
+            print(carregando) # imprimindo a string 'carregando' na tela
+            carregando += '.' # concatenando um '.' na string para dar a sensação de animação, devido a variação de '.' com o loop
+            congelar(0.5) # congelando a tela por alguns milésimos para que o usuário veja as transições de '.', dando a sensação de animação
 
-###################################################   
+def inicio(): # função para iniciar o sistema
+    titulo() # função para imprimir o nome do sistema na tela
+    msg_entrada(['Olá, Tudo bem?','Me chamo Herik','sou o assistente virtual do Banco Herik','Estou aqui para te ajudar!'],titulo) # função para imprimir uma string na tela como 'animação'
+    congelar(0.5) # congelando a tela 
+    while True: # loop 
+        titulo() # função para mostrar o nome do sistema na tela
+        msg_entrada(['O que deseja fazer?'],titulo) # função para imprimir uma string na tela como 'animação'
+        print() # imprimindo um espaço vazio para separar as linhas
+        print('[1] Fazer login\n[2] Criar uma conta\n[3] Sobre nós\n') # imprimindo as opções do menu principal do sistema
+        validas = ['1','2','3'] # criando uma lista de inputs válidos
+        opcao = input(' :') # input da opção escolhida pelo usuário
+        if opcao not in validas: # verificando se opção é válida
+            error('TypeError') # função para imprimir mensagem de erro 
+        else: # se a opção escolhida pelo usuário for válida, continuamos o programa
+            continuar = opcao_entrada(opcao) # chamando a função 'opcao_entrada' para verificar qual foi a opção escolhida pelo usuário e guardando o retorno booleando da função em uma variável de controle
+            if not continuar: # se a variável for False, continuamos o loop para perguntar novamente ao usuário 
+                continue # continuando o loop
+            else: # se a variável for True, paramos o loop e continuamos o sistema
+                break # parando o loop
+
+def input_dados(tipo_dados): # função para input das informações do usuário
+    if tipo_dados == 'criar': # verificando qual vai ser o tipo de input para pedir ao usuário
+        msg_entrada('preecha as informações da conta:',titulo) # função para imprimir uma string na tela como 'animação'
+        print() # imprimindo um separador de linhas
+        nome = input('Nome: ') # input do nome do usuário
+        sobrenome = input('sobrenome: ') # input do sobrenome do usuário
+        cpf = input('cpf: ') # input do cpf do usuário
+        email = input('email: ') # input do email do usuário
+        senha = input('senha: ') # input do senha do usuário
+        return nome,sobrenome,cpf,email,senha # retornado os inputs
+    else: # verificando qual vai ser o tipo de input para pedir ao usuário
+        msg_entrada('preecha as informações da conta:',titulo) # função para imprimir uma string na tela como 'animação'
+        print() # imprimindo um separador de linhas
+        email = input('email: ') # input do email do usuário
+        senha = input('senha: ') # input da senha do usuário
+        return email,senha # retornando os inputs
+
+######################################################################
+# Funções do menu principal
+######################################################################  
 
 def opcao_entrada(opcao):
     if opcao == '1':
@@ -188,7 +175,7 @@ def login():
                     return True,conta
                 else:
                     i += 1
-            return False
+            return False,None
 
 def sobre_nos():
     carregando()

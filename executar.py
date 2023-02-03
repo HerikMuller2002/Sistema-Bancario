@@ -1,3 +1,3 @@
-from Sistema import entrada
+from Sistema import entrada # importando a função entrada() para iniciar o programa
 
-entrada()
+inicio() # chamando a fução para iniciar o programa
