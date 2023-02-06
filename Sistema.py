@@ -1,9 +1,9 @@
 # import
-from Cliente import CriarCliente
-from Cliente import ExcluirCliente
-import json
-import os
-import time
+from Cliente import CriarCliente # importando a classe 'CriarCliente' para criar um objeto 'conta'
+from Cliente import ExcluirCliente # importando a classe 'ExcluirCliente' para excluir um objeto 'conta'
+import json # importando a lib 'json' para tratar arquivos json
+import os # importando a lib 'os' para executar comandos no terminal 
+import time # importando a lib 'time' para controlar o tempo que os textos vão ficar no terminal
 
 ######################################################################
 # Funções de erros
@@ -33,7 +33,6 @@ def error(erro): # função para definir o tipo de erro
         msg_erro('Deposito inválido!') # chamando a função para imprimir a mensagem expecífica
 
     elif erro == 'opcao':
-        print('Erro!\nOpção inválida!') # opção inválida
         msg_erro('Opção inválida!') # chamando a função para imprimir a mensagem expecífica
 
 ######################################################################
@@ -117,56 +116,59 @@ def input_dados(tipo_dados): # função para input das informações do usuário
 # Funções do menu principal
 ######################################################################  
 
-def opcao_entrada(opcao):
-    if opcao == '1':
-        tentativas = 0
-        while True:
-            if tentativas < 3:
-                validar,conta = login()
-                if validar:
-                    ContaCliente(conta)
-                    return False
-                else:
-                    error('confirm')
-                    tentativas += 1
-            else:
-                return False
-    elif opcao == '2':
-        criar_conta()
-        return False
-    elif opcao == '3':
-        sobre_nos()
-        return False
+def opcao_entrada(opcao): # função para verificar qual opção que o usuário escolheu no menu principal
+    if opcao == '1': # verificando se a opção do usuário foi (1 - login)
+        tentativas = 0 # criando uma variável de controle para verificar quantas tentativas de logins erradas foram feitas
+        while True: # loop para pedir login
+            if tentativas < 3: # verificando se o número de tentativas está dentro do aceitável
+                validar,conta = login() # chamando a função login 
+                if validar: # verificando se o login está correto
+                    ContaCliente(conta) # puxando o objeto 'conta' que corresponde com as informações do login
+                    return False # retornando False para parar o loop
+                else: # verificando se o login está errado
+                    error('confirm') # chamando a função 'error' para imprimir uma mensagem de erro na tela
+                    tentativas += 1 # aumentando a variável tentativas erradas
+            else: # se o número de tantativas exceder o aceitável...
+                return False # retornando False para parar o loop e voltar para o menu principal
+    elif opcao == '2': # verificando se a opção do usuário foi (2 - criar conta)
+        criar_conta() # chamando a função criar_conta para criar um objeto 'conta' 
+        return False # retornando False para parar o loop e voltar para o menu principal
+    elif opcao == '3': # verificando se a opção do usuário foi (3 - sobre nós)
+        sobre_nos() # chamando a função sobre_nos para mostrar um breve texto sobre a empresa
+        return False # retornando False para parar o loop e voltar para o menu principal
 
-def criar_conta():
-    carregando()
-    while True:
-        limpar()
-        titulo()
-        opcao = input('Deseja criar uma conta?\n[s]im [n]ão: ').lower()
-        if opcao == 's':
-            while True:
-                limpar()
-                titulo()
-                nome,sobrenome,cpf,email,senha = input_dados('criar')
-                confirm_email = input('confirme seu email: ')
-                confirm_senha = input('confirme sua senha: ')
-                if confirm_email != email or confirm_senha != senha:
-                    error('confirm')
-                    continue
-                else:
-                    cliente = CriarCliente(nome,sobrenome,cpf,email,senha,saldo=0)
-                break
-        else:
-            break
+def criar_conta(): # função para criar um objeto 'conta'
+    carregando() # chamando a função carregando para imprimir no terminal uma 'animação' de tela de carregamento
+    while True: # loop para pedir as informações da conta
+        limpar() # chamando a função limpar para limpar o terminal
+        titulo() # chamando a função titulo para imprimir o nome do sistema no terminal
+        opcao = input('Deseja criar uma conta?\n[s]im [n]ão: ').lower() # confirmando a intenção do usuário de criar uma conta
+        if opcao == 's': # se o usuário confirmar, então o sistema continua com a criação da conta
+            while True: # loop para pedir as informações da conta
+                limpar() # chamando a função 'limpar' para limpar o terminal
+                titulo() # chamando a função titulo para imprimir o nome do sistema no terminal
+                nome,sobrenome,cpf,email,senha = input_dados('criar') # chamando a função para input das informações do usuário
+                confirm_email = input('confirme seu email: ') # pedindo a confirmação do email inserido
+                confirm_senha = input('confirme sua senha: ') # pedindo a confirmação da senha inserida
+                if confirm_email != email or confirm_senha != senha: # verificando se as confirmações não correspondem com o email e senha inseridos
+                    error('confirm') # chamando a função error para imprimir uma mensagemde erro na tela
+                    continue # continuando o loop para pedir as informações novamente
+                else: # verificando se as confirmações correspondem com o email e senha inseridos
+                    cliente = CriarCliente(nome,sobrenome,cpf,email,senha,saldo=0) # armazenando as informações do cliente no objeto 'conta'
+                break # encerrando o loop 
+        elif opcao == 'n': # se o usuário escolheu não criar uma conta...
+            break # encerrando o loop e voltando para o menu principal
+        else: # caso o usuário não digite uma opção válida...
+            error('opcao') # chamando a função error para imprimir uma mensagem de erro no terminal
+            continue # continuando o loop para perguntar novamente ao usuário
 
-def login():
-    carregando()
-    email,senha = input_dados('login')
-    with open('data_base.json','r') as db:
-        if os.stat('data_base.json').st_size == 0: # se o arquivo está vazio
-            return False,None
-        else: # se o arquivo não estiver vazio
+def login(): # função para verificar se os dados do login correspondem aos da conta
+    carregando() # chamando a função carregando para imprimir no terminal uma 'animação' de tela de carregamento
+    email,senha = input_dados('login') # chamando a função para pedir o input do email e senha da conta
+    with open('data_base.json','r') as db: # abrindo o arquivo json com os objetos 'conta', em modo leitura  
+        if os.stat('data_base.json').st_size == 0: # se o arquivo estiver vazio...
+            return False,None # retornamos False e None
+        else: # se o arquivo não estiver vazio, damos continuidade ao sistema
             dados_cliente = json.load(db) # carregando a lista do arquivo
             i = 0
             while i < len(dados_cliente):
